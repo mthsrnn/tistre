@@ -18,8 +18,10 @@
 
 # drawTetriminoJ: desenha um tetrimino J de uma determinada cor
 .macro drawTetriminoJ(%pos, %color)
-    
-    addi $a0, $s0, %pos        
+
+	move $s7, %pos
+	
+    add $a0, $s0, $s7        
     li   $a1, %color           
     jal  drawBlock             
 
@@ -31,7 +33,7 @@
     li   $a1, %color           
     jal  drawBlock             
 
-    addi $a0, $s0, %pos       
+    add $a0, $s0, $s7        
     addi $a0, $a0, 8160 # 8192 - 32
     li   $a1, %color           
     jal  drawBlock             
@@ -39,8 +41,10 @@
 
 # drawTetriminoJ: desenha um tetrimino J de uma determinada cor
 .macro drawTetriminoL(%pos, %color)
+
+	move $s7, %pos
     
-    addi $a0, $s0, %pos        
+    add $a0, $s0, $s7
     li   $a1, %color           
     jal  drawBlock             
 
@@ -52,7 +56,7 @@
     li   $a1, %color           
     jal  drawBlock             
 
-    addi $a0, $s0, %pos       
+    add $a0, $s0, $s7
     addi $a0, $a0, 8224 # 8192 + 32        
     li   $a1, %color           
     jal  drawBlock             
@@ -60,8 +64,10 @@
 
 # drawTetriminoI: desenha um tetrimino I de uma determinada cor
 .macro drawTetriminoI(%pos, %color)
+
+	move $s7, %pos
     
-    addi $a0, $s0, %pos        
+    add $a0, $s0, $s7        
     li   $a1, %color           
     jal  drawBlock             
 
@@ -69,7 +75,7 @@
     li   $a1, %color           
     jal  drawBlock             
 
-    addi $a0, $a0, 4096       
+    add $a0, $a0, 4096       
     li   $a1, %color           
     jal  drawBlock             
 
@@ -85,8 +91,9 @@
 
 # drawTetriminoZ: desenha um tetrimino Z de uma determinada cor
 .macro drawTetriminoZ(%pos, %color)
+    move $s7, %pos
     
-    addi $a0, $s0, %pos        
+    add  $a0, $s0, $s7        
     li   $a1, %color           
     jal  drawBlock             
 
@@ -106,8 +113,9 @@
 
 # drawTetriminoS: desenha um tetrimino S de uma determinada cor
 .macro drawTetriminoS(%pos, %color)
-    
-    addi $a0, $s0, %pos        
+    move $s7, %pos
+    	
+    add $a0, $s0, $s7        
     li   $a1, %color           
     jal  drawBlock             
 
@@ -127,8 +135,10 @@
 
 # drawTetriminoS: desenha um tetrimino O de uma determinada cor
 .macro drawTetriminoO(%pos, %color)
+    move $s7, %pos
     
-    addi $a0, $s0, %pos        
+    add $a0, $s0, $s7
+         
     li   $a1, %color           
     jal  drawBlock             
 
@@ -148,8 +158,9 @@
 
 # drawTetriminoT: desenha um tetrimino T de uma determinada cor
 .macro drawTetriminoT(%pos, %color)
+    move $s7, %pos
     
-    addi $a0, $s0, %pos        
+    add $a0, $s0, $s7
     li   $a1, %color           
     jal  drawBlock                          
 
