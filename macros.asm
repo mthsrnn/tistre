@@ -16,8 +16,8 @@
 	jal drawLineV
 .end_macro
 
-# drawTetrisJ: desenha um tetrimino J de uma determinada cor
-.macro drawTetrisJ(%pos, %color)
+# drawTetriminoJ: desenha um tetrimino J de uma determinada cor
+.macro drawTetriminoJ(%pos, %color)
     
     addi $a0, $s0, %pos        
     li   $a1, %color           
@@ -32,14 +32,13 @@
     jal  drawBlock             
 
     addi $a0, $s0, %pos       
-    addi $a0, $a0, 8192        
-    addi $a0, $a0, -32          
+    addi $a0, $a0, 8160 # 8192 - 32
     li   $a1, %color           
     jal  drawBlock             
 .end_macro
 
-# drawTetrisJ: desenha um tetrimino J de uma determinada cor
-.macro drawTetrisL(%pos, %color)
+# drawTetriminoJ: desenha um tetrimino J de uma determinada cor
+.macro drawTetriminoL(%pos, %color)
     
     addi $a0, $s0, %pos        
     li   $a1, %color           
@@ -54,14 +53,13 @@
     jal  drawBlock             
 
     addi $a0, $s0, %pos       
-    addi $a0, $a0, 8192        
-    addi $a0, $a0, 32          
+    addi $a0, $a0, 8224 # 8192 + 32        
     li   $a1, %color           
     jal  drawBlock             
 .end_macro
 
-# drawTetrisJ: desenha um tetrimino I de uma determinada cor
-.macro drawTetrisI(%pos, %color)
+# drawTetriminoI: desenha um tetrimino I de uma determinada cor
+.macro drawTetriminoI(%pos, %color)
     
     addi $a0, $s0, %pos        
     li   $a1, %color           
@@ -80,6 +78,90 @@
     jal  drawBlock
     
     addi $a0, $a0, 4096       
+    li   $a1, %color           
+    jal  drawBlock  
+           
+.end_macro
+
+# drawTetriminoZ: desenha um tetrimino Z de uma determinada cor
+.macro drawTetriminoZ(%pos, %color)
+    
+    addi $a0, $s0, %pos        
+    li   $a1, %color           
+    jal  drawBlock             
+
+    addi $a0, $a0, 32        
+    li   $a1, %color           
+    jal  drawBlock             
+
+    addi $a0, $a0, 4096       
+    li   $a1, %color           
+    jal  drawBlock             
+    
+    addi $a0, $a0, 32       
+    li   $a1, %color           
+    jal  drawBlock  
+           
+.end_macro
+
+# drawTetriminoS: desenha um tetrimino S de uma determinada cor
+.macro drawTetriminoS(%pos, %color)
+    
+    addi $a0, $s0, %pos        
+    li   $a1, %color           
+    jal  drawBlock             
+
+    addi $a0, $a0, 32        
+    li   $a1, %color           
+    jal  drawBlock             
+
+    addi $a0, $a0, 4064 # 4096 - 32       
+    li   $a1, %color           
+    jal  drawBlock             
+    
+    addi $a0, $a0, -32       
+    li   $a1, %color           
+    jal  drawBlock  
+           
+.end_macro
+
+# drawTetriminoS: desenha um tetrimino O de uma determinada cor
+.macro drawTetriminoO(%pos, %color)
+    
+    addi $a0, $s0, %pos        
+    li   $a1, %color           
+    jal  drawBlock             
+
+    addi $a0, $a0, 32        
+    li   $a1, %color           
+    jal  drawBlock             
+
+    addi $a0, $a0, 4064 # 4096 - 32       
+    li   $a1, %color           
+    jal  drawBlock             
+    
+    addi $a0, $a0, 32       
+    li   $a1, %color           
+    jal  drawBlock  
+           
+.end_macro
+
+# drawTetriminoT: desenha um tetrimino T de uma determinada cor
+.macro drawTetriminoT(%pos, %color)
+    
+    addi $a0, $s0, %pos        
+    li   $a1, %color           
+    jal  drawBlock                          
+
+    addi $a0, $a0, 4064 # 4096 - 32       
+    li   $a1, %color           
+    jal  drawBlock             
+    
+    addi $a0, $a0, 32       
+    li   $a1, %color           
+    jal  drawBlock  
+    
+    addi $a0, $a0, 32       
     li   $a1, %color           
     jal  drawBlock  
            

@@ -8,3 +8,4 @@
 .eqv MAGENTA 0xe02c6d
 .eqv CYAN 0x0aaeb3
 .eqv WHITE 0xbaa67f
+.eqv ORANGE 0xff5f00
