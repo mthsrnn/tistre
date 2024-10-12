@@ -1,5 +1,12 @@
 .include "macros.asm"
 .include "definicoes.asm"
+.include "tetriminoJ.asm"
+.include "tetriminoL.asm"
+.include "tetriminoT.asm"
+.include "tetriminoZ.asm"
+.include "tetriminoS.asm"
+.include "tetriminoI.asm"
+.include "tetriminoO.asm"
 
 # CONFIGURAÇÕES
 # Mars:	   Settings->Permit extended (pseudo) instructions and formats
@@ -8,6 +15,12 @@
 #		   Unit Height in Pixels: 2
 #		   Display Width in Pixels: 256
 #		   Display Height in Pixels: 512
+#		   Base address for display: 0x10040000(heap)
+#
+# Display: Unit Width in Pixels: 4
+#		   Unit Height in Pixels: 4
+#		   Display Width in Pixels: 512
+#		   Display Height in Pixels: 1024
 #		   Base address for display: 0x10040000(heap)
 
 .text
@@ -20,13 +33,26 @@ main:
 	drawVerticalLine(162, 3936, WHITE)
 	drawHorizontalLine(82, 86044, WHITE)
 	
-	jal randomTetrimino
+	# "e viu-se a borda vermelha como enfeite, era uma gambiarra recôndita"
+	# "removereis a borda vermelha do display, e cagareis a colisão no game"
+	# SALMOS 4:20-21
+	drawVerticalLine(256, 0, RED)
+	drawVerticalLine(256, 508, RED)
+	drawHorizontalLine(128, 0, RED)
+	drawHorizontalLine(128, 130560, RED)
 	
-	li $s4, 16
-	loopqueda:
-	jal fallingTetrimino
-	addi $s4, $s4, -1
-	bgt $s4, $zero, loopqueda
+	li $s1, 4288
+	
+	loop2:
+	jal randomTetrimino
+	li $s5, 22
+	loop:
+	li $a0, DOWN
+	jal moveTetrimino
+	addi $s5, $s5, -1
+	bgtz $v0, loop2
+	bgtz $s5, loop
+
 	
 	li $v0, 10
 	syscall

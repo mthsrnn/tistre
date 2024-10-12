@@ -1,3 +1,7 @@
+.include "moveTetrimino.asm"
+.include "rotateTetrimino.asm"
+
+
 drawLineH:
 	move $t2, $a2
 	move $t3, $a0
@@ -51,6 +55,22 @@ deleteBlock:
 			bgt $t2, 0, deleteBlockOuterLoop
 	jr $ra
 
+collisionCheck:
+	addi $sp, $sp, -4
+	sw   $ra, 0($sp)
+
+    lw $t1, 0($a0)
+    beq $t1, BLACK, collisionCheckEnd
+
+	#li $a1, RED
+	#jal drawBlock
+
+	addi $v0, $v0, 1
+
+	collisionCheckEnd:
+	lw   $ra, 0($sp)
+	addi $sp, $sp, 4
+    jr $ra
 
 randomTetrimino:
 	addi $sp, $sp, -4
@@ -60,8 +80,10 @@ randomTetrimino:
     li $a1, 6
     li $v0, 42
     syscall
-    
+
     move $s2, $a0
+	li $s1, 4288
+	li $s3, 0 # guarda a rotação atual do tetrimino
     
     beq $a0, 0, randomTetriminoJ
     beq $a0, 1, randomTetriminoL
@@ -73,38 +95,35 @@ randomTetrimino:
     j endRandomTetrimino
 
 	randomTetriminoJ:
-		li $s1, 4288
-    	drawTetriminoJ($s1, BLUE)
+		addi $s1, $s1, -4096
+    	drawTetriminoJ_0($s1, BLUE)
     	j endRandomTetrimino
 
 	randomTetriminoL:
-		li $s1, 4256
-    	drawTetriminoL($s1, RED)
+    	drawTetriminoL_0($s1, RED)
     	j endRandomTetrimino
 
 	randomTetriminoI:
-		li $s1, 4256
-    	drawTetriminoI($s0, CYAN)
+    	drawTetriminoI_0($s1, CYAN)
     	j endRandomTetrimino
 
 	randomTetriminoO:
-		li $s1, 4256
-    	drawTetriminoO($s1, YELLOW)
+		addi $s1, $s1, -4096
+    	drawTetriminoO_0($s1, YELLOW)
     	j endRandomTetrimino
 
 	randomTetriminoS:
-		li $s1, 4256
-    	drawTetriminoS($s1, MAGENTA)
+		addi $s1, $s1, -4096
+    	drawTetriminoS_0($s1, MAGENTA)
     	j endRandomTetrimino
 
 	randomTetriminoZ:
-		li $s1, 4256
-    	drawTetriminoZ($s1, MAGENTA)
+		addi $s1, $s1, -4096
+    	drawTetriminoZ_0($s1, GREEN)
     	j endRandomTetrimino
 
 	randomTetriminoT:
-		li $s1, 4224
-    	drawTetriminoT($s1, ORANGE)
+    	drawTetriminoT_0($s1, ORANGE)
     	j endRandomTetrimino
 
 	endRandomTetrimino:
@@ -112,95 +131,3 @@ randomTetrimino:
     	addi $sp, $sp, 4
     	jr   $ra
 
-fallingTetrimino:
-    addi $sp, $sp, -4
-    sw   $ra, 0($sp)
-
-    move $t0, $s2            
-    beq $t0, 0, fallTetriminoJ
-    beq $t0, 1, fallTetriminoL
-    beq $t0, 2, fallTetriminoI
-    beq $t0, 3, fallTetriminoO
-    beq $t0, 4, fallTetriminoS
-    beq $t0, 5, fallTetriminoZ
-    beq $t0, 6, fallTetriminoT
-    j endFallingTetrimino
-
-fallTetriminoJ:
-    drawTetriminoJ($s1, BLACK)
-
-    addi $s1, $s1, 4096
-
-    drawTetriminoJ($s1, BLUE)
-    j endFallingTetrimino
-
-fallTetriminoL:
-    # Delete the current L block
-    drawTetriminoL($s1, BLACK)
-
-    # Move the position down by one row
-    addi $s1, $s1, 4096
-
-    # Draw the L block at the new position
-    drawTetriminoL($s1, RED)
-    j endFallingTetrimino
-
-fallTetriminoI:
-    # Delete the current I block
-    drawTetriminoI($s1, BLACK)
-
-    # Move the position down by one row
-    addi $s1, $s1, 4096
-
-    # Draw the I block at the new position
-    drawTetriminoI($s1, CYAN)
-    j endFallingTetrimino
-
-fallTetriminoO:
-    # Delete the current O block
-    drawTetriminoO($s1, BLACK)
-
-    # Move the position down by one row
-    addi $s1, $s1, 4096
-
-    # Draw the O block at the new position
-    drawTetriminoO($s1, YELLOW)
-    j endFallingTetrimino
-
-fallTetriminoS:
-    # Delete the current S block
-    drawTetriminoS($s1, BLACK)
-
-    # Move the position down by one row
-    addi $s1, $s1, 4096
-
-    # Draw the S block at the new position
-    drawTetriminoS($s1, GREEN)
-    j endFallingTetrimino
-
-fallTetriminoZ:
-    # Delete the current Z block
-    drawTetriminoZ($s1, BLACK)
-
-    # Move the position down by one row
-    addi $s1, $s1, 4096
-
-    # Draw the Z block at the new position
-    drawTetriminoZ($s1, MAGENTA)
-    j endFallingTetrimino
-
-fallTetriminoT:
-    # Delete the current T block
-    drawTetriminoT($s1, BLACK)
-
-    # Move the position down by one row
-    addi $s1, $s1, 4096
-
-    # Draw the T block at the new position
-    drawTetriminoT($s1, ORANGE)
-    j endFallingTetrimino
-
-endFallingTetrimino:
-    lw   $ra, 0($sp)      # Restore the return address
-    addi $sp, $sp, 4      # Deallocate space on the stack
-    jr   $ra              # Return from the routine
