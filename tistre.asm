@@ -7,6 +7,7 @@
 .include "tetriminoS.asm"
 .include "tetriminoI.asm"
 .include "tetriminoO.asm"
+.include "coreMechanics.asm"
 
 # CONFIGURAÇÕES
 # Mars:	   Settings->Permit extended (pseudo) instructions and formats
@@ -25,34 +26,48 @@
 
 .text
 main:
-	lui  $s0, 0x1004					 # endereço do display
-	drawHorizontalLine(32768, 0, BLACK)  # limpador de tela vagabundo
-	#desenhando o tetrisboard
-	drawHorizontalLine(82, 3612, WHITE)  # (4096 (uma coluna) - 512 (uma linha)) + 32 - 4 (borda)
-	drawVerticalLine(162, 3612, WHITE)
-	drawVerticalLine(162, 3936, WHITE)
-	drawHorizontalLine(82, 86044, WHITE)
+	lui  $s0, 0x1004					# Endereço do display
+	#li $s1, 4288						# Endereço do tetrimino inicial (definido aqui para debug) 
+	drawScreen							# Renderiza as bordas da tela do jogo (também limpa tudo)
+		
+	li $s5, 0
+
+	li $t0, 4528
+	drawTetriminoO_0($t0, CYAN)
 	
-	# "e viu-se a borda vermelha como enfeite, era uma gambiarra recôndita"
-	# "removereis a borda vermelha do display, e cagareis a colisão no game"
-	# SALMOS 4:20-21
-	drawVerticalLine(256, 0, RED)
-	drawVerticalLine(256, 508, RED)
-	drawHorizontalLine(128, 0, RED)
-	drawHorizontalLine(128, 130560, RED)
-	
-	li $s1, 4288
-	
-	loop2:
+	newTetrimino:
 	jal randomTetrimino
-	li $s5, 22
+	
 	loop:
+	addu $s5, $s5, 1
+	bgtu $s5, 20000, fallTetrimino
+	jal keyboardParse
+	beqz $v0, skipMovement
+	beq $v0, DOWN, checkCollisionDown
+	bnez $v1, movementRotation
+	move $a0, $v0
+	jal moveTetrimino
+	j loop
+	
+	fallTetrimino:
 	li $a0, DOWN
 	jal moveTetrimino
-	addi $s5, $s5, -1
-	bgtz $v0, loop2
-	bgtz $s5, loop
-
+	li $s5, 0
+	bnez $v0, newTetrimino
+	j loop
+	
+	movementRotation:
+	jal rotateTetrimino
+	j loop
+	
+	checkCollisionDown:
+	move $a0, $v0
+	jal moveTetrimino
+	bnez $v0, newTetrimino
+	j loop
+	
+	skipMovement:
+	j loop
 	
 	li $v0, 10
 	syscall

@@ -70,7 +70,7 @@ rotateTetrimino:
 		collisionCheckJ_2($zero)
 		bgtz $v0, collisionDetectedRotationJ_1 
         
-        li $s3, 1
+        li $s3, 2
 		drawTetriminoJ_2($s1, BLUE)
 		j endRotateTetrimino
 
@@ -81,7 +81,7 @@ rotateTetrimino:
 	rotateTetriminoJ_2:
 		drawTetriminoJ_2($s1, BLACK)
 
-		collisionCheckJ_2($zero)
+		collisionCheckJ_3($zero)
 		bgtz $v0, collisionDetectedRotationJ_2
 
         li $s3, 3
@@ -98,7 +98,7 @@ rotateTetrimino:
 		collisionCheckJ_0($zero)
 		bgtz $v0, collisionDetectedRotationJ_3
 
-        li $s3, 3
+        li $s3, 0
 		drawTetriminoJ_0($s1, BLUE)
 		j endRotateTetrimino
 
@@ -165,7 +165,7 @@ rotateTetrimino:
 	rotateTetriminoI_0:
 		drawTetriminoI_0($s1, BLACK)
 
-		collisionCheckI_0($zero)
+		collisionCheckI_1($zero)
 		bgtz $v0, collisionDetectedRotationI_0
 
         li $s3, 1

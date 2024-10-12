@@ -1,5 +1,6 @@
 .include "moveTetrimino.asm"
 .include "rotateTetrimino.asm"
+.include "keyboardParse.asm"
 
 
 drawLineH:

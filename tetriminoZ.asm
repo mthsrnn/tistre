@@ -28,7 +28,7 @@
     
     add  $a0, $s0, $s7
 
-    addi $a0, $a0, 64 # 32 + 32       
+    addi $a0, $a0, 32 # 32 + 32       
     li   $a1, %color           
     jal  drawBlock             
 
@@ -90,7 +90,7 @@
     add $a0, $s1, $s7
     add $a0, $a0, $s0
 
-    addi $a0, $a0, 64        
+    addi $a0, $a0, 32        
     jal  collisionCheck             
 
     addi $a0, $a0, 4096        
