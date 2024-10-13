@@ -17,3 +17,66 @@
 	
 	jal drawLineV
 .end_macro
+
+.macro randomTetrimino(%register)
+    li $a0, 0
+    li $a1, 7
+    li $v0, 42
+    syscall
+
+	move %register, $a0
+.end_macro
+
+.macro clearNextTetrimino(%pos)
+    move $s7, %pos
+    
+    add $a0, $s0, $s7
+	addi $a0, $a0, -64	          
+    jal  deleteBlock                          
+
+    addi $a0, $a0, 32 # 4096 - 32       
+    jal  deleteBlock             
+    
+    addi $a0, $a0, 32       
+    jal  deleteBlock  
+    
+    addi $a0, $a0, 32       
+    jal  deleteBlock  
+
+	addi $a0, $a0, 4096	          
+    jal  deleteBlock                          
+
+    addi $a0, $a0, -32 # 4096 - 32       
+    jal  deleteBlock             
+    
+    addi $a0, $a0, -32       
+    jal  deleteBlock  
+    
+    addi $a0, $a0, -32       
+    jal  deleteBlock  
+
+	addi $a0, $a0, 4096	          
+    jal  deleteBlock                          
+
+    addi $a0, $a0, 32 # 4096 - 32       
+    jal  deleteBlock             
+    
+    addi $a0, $a0, 32       
+    jal  deleteBlock  
+    
+    addi $a0, $a0, 32       
+    jal  deleteBlock  
+
+		addi $a0, $a0, 4096	          
+    jal  deleteBlock                          
+
+    addi $a0, $a0, -32 # 4096 - 32       
+    jal  deleteBlock             
+    
+    addi $a0, $a0, -32       
+    jal  deleteBlock  
+    
+    addi $a0, $a0, -32       
+    jal  deleteBlock  
+           
+.end_macro

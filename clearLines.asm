@@ -15,6 +15,7 @@ clearLines:
     addi $s0, $s0, 8224 #4096+32
     move $s3, $s0
 
+    li $s6, 0
     li $s1, 19
     li $s4, 0
 
@@ -32,6 +33,7 @@ clearLines:
 
         move $a0, $s3
         move $a1, $s1
+        addi $s6, $s6, 1
         jal deleteLines
 
         skipDeleteLine:
@@ -43,6 +45,8 @@ clearLines:
         bgt $s1, $zero, clearLinesLoop
         
     clearLinesEnd:
+        mul $v0, $s6, 100 #SE DER PRA BREACAR, BRECA AQUI
+
         lw $ra, 32($sp)
         lw $s7, 28($sp)
         lw $s6, 24($sp)

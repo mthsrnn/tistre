@@ -4,49 +4,26 @@
 	move $s7, %pos
     
     add $a0, $s0, $s7
+    li   $a1, %color
+
+    addi $a0, $a0, 4064           
+    jal  drawBlock             
+
+    addi $a0, $a0, 32        
     li   $a1, %color           
     jal  drawBlock             
 
-    addi $a0, $a0, 4096        
+    addi $a0, $a0, 32       
     li   $a1, %color           
     jal  drawBlock             
 
-    addi $a0, $a0, 4096       
-    li   $a1, %color           
-    jal  drawBlock             
-
-    addi $a0, $a0, 32     
+    addi $a0, $a0, 4032     
     li   $a1, %color           
     jal  drawBlock    
 .end_macro
 
 # drawTetriminoL_1: desenha um tetrimino L de uma determinada cor (rotação 1)
 .macro drawTetriminoL_1(%pos, %color)
-
-	move $s7, %pos
-    
-    add $a0, $s0, $s7
-
-    addi $a0, $a0, 32
-    li   $a1, %color           
-    jal  drawBlock             
-
-    addi $a0, $a0, 4096        
-    li   $a1, %color           
-    jal  drawBlock             
-
-    addi $a0, $a0, -32       
-    li   $a1, %color           
-    jal  drawBlock             
-
-    addi $a0, $a0, -32      
-    li   $a1, %color           
-    jal  drawBlock             
-.end_macro
-
-
-# drawTetriminoL_2: desenha um tetrimino L de uma determinada cor (rotação 2)
-.macro drawTetriminoL_2(%pos, %color)
 
 	move $s7, %pos
     
@@ -66,6 +43,31 @@
 
     addi $a0, $a0, 4096     
     li   $a1, %color           
+    jal  drawBlock             
+.end_macro
+
+
+# drawTetriminoL_2: desenha um tetrimino L de uma determinada cor (rotação 2)
+.macro drawTetriminoL_2(%pos, %color)
+
+	move $s7, %pos
+    
+    add $a0, $s0, $s7
+
+    addi $a0, $a0, 64
+    li   $a1, %color           
+    jal  drawBlock             
+
+    addi $a0, $a0, 4032        
+    li   $a1, %color           
+    jal  drawBlock             
+
+    addi $a0, $a0, 32       
+    li   $a1, %color           
+    jal  drawBlock             
+
+    addi $a0, $a0, 32     
+    li   $a1, %color           
     jal  drawBlock    
 .end_macro
 
@@ -76,19 +78,18 @@
     
     add $a0, $s0, $s7
 
-    addi $a0, $a0, 4064 # 4096 - 32
     li   $a1, %color           
     jal  drawBlock             
 
-    addi $a0, $a0, 32        
+    addi $a0, $a0, 4096        
     li   $a1, %color           
     jal  drawBlock             
 
-    addi $a0, $a0, 32       
+    addi $a0, $a0, 4096       
     li   $a1, %color           
     jal  drawBlock             
 
-    addi $a0, $a0, 4032 # 4096 - 32 - 32      
+    addi $a0, $a0, 32 # 4096 - 32 - 32      
     li   $a1, %color           
     jal  drawBlock             
 .end_macro
@@ -135,15 +136,16 @@
     add $a0, $s1, $s7
     add $a0, $a0, $s0
 
+    addi $a0, $a0, 4064
     jal collisionCheck
 
-    addi $a0, $a0, 4096
+    addi $a0, $a0, 32
     jal  collisionCheck 
 
-    addi $a0, $a0, 4096        
+    addi $a0, $a0, 32        
     jal  collisionCheck             
 
-    addi $a0, $a0, 32       
+    addi $a0, $a0, 4032       
     jal  collisionCheck             
     
 .end_macro
@@ -155,16 +157,16 @@
     add $a0, $s1, $s7
     add $a0, $a0, $s0
 
-    addi $a0, $a0, 32
+    addi $a0, $a0, -32
     jal  collisionCheck             
 
-    addi $a0, $a0, 4096        
+    addi $a0, $a0, 32         
     jal  collisionCheck             
 
-    addi $a0, $a0, -32       
+    addi $a0, $a0, 4096       
     jal  collisionCheck             
 
-	addi $a0, $a0, -32       
+	addi $a0, $a0, 4096       
     jal  collisionCheck
 
            
@@ -178,16 +180,16 @@
     add $a0, $s1, $s7
     add $a0, $a0, $s0
 
-    addi $a0, $a0, -32
+    addi $a0, $a0, 64
     jal collisionCheck
 
-    addi $a0, $a0, 32
+    addi $a0, $a0, 4032
     jal  collisionCheck 
 
-    addi $a0, $a0, 4096        
+    addi $a0, $a0, 32        
     jal  collisionCheck             
 
-    addi $a0, $a0, 4096       
+    addi $a0, $a0, 32       
     jal  collisionCheck            
     
 .end_macro
@@ -199,16 +201,15 @@
     add $a0, $s1, $s7
     add $a0, $a0, $s0
 
-    addi $a0, $a0, 4064
     jal  collisionCheck             
 
-    addi $a0, $a0, 32        
+    addi $a0, $a0, 4096        
     jal  collisionCheck             
 
-    addi $a0, $a0, 32       
+    addi $a0, $a0, 4096       
     jal  collisionCheck             
 
-	addi $a0, $a0, 4032       
+	addi $a0, $a0, 32       
     jal  collisionCheck
            
 .end_macro

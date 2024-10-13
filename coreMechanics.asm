@@ -6,7 +6,6 @@
 	drawVerticalLine(162, 3612, WHITE)
 	drawVerticalLine(162, 3936, WHITE)
 	drawHorizontalLine(82, 86044, WHITE)
-	
 	drawHorizontalLine(34, 3948, WHITE)
 	drawVerticalLine(34, 3948, WHITE)
 	drawVerticalLine(34, 4080, WHITE)
@@ -22,15 +21,51 @@
 .end_macro
 
 .macro gameLoop
+	#s0 -> ponteiro para o display
+	#s1 -> posição do tetrimino atual
+	#s2 -> tipo do tetrimino atual
+	#s3 -> rotação do tetrimino atual
+	#s4 -> proximo tetrimino
+	#s5 -> pontuação
+
+	
+	lui  $s0, 0x1004
+	li $s5, 0
+	# 4288 -> tetrimino no tetrisboard
+	# 4528 -> tetrimino na caixa do proximo tetrimino
+
+	randomTetrimino($s4)
+	li $s3, 0
 
 	newTetrimino:
 	move $a0, $s0
 	jal clearLines
-	jal randomTetrimino
+	add $s5, $s5, $v0
+
+
+	move $s2, $s4
+	
+	randomTetrimino($s4)
+    nop #AQUI
+	li $a1, 4528
+	clearNextTetrimino($a1)
+	move $a0, $s4
+	jal drawNewTetrimino ############################## ERRO AQUI
+
+	
+
+	move $a3, $s0
+	li $a1, 4288
+	move $a0, $s2
+	li $s3, 0
+	jal drawNewTetrimino
+	move $s1, $v1
+	bnez $v0, gameOver
+
 	
 	loop:
 	addu $s5, $s5, 1
-	bgtu $s5, 50000, fallTetrimino
+	bgtu $s5, 100000, fallTetrimino
 	jal keyboardParse
 	beqz $v0, skipMovement
 	beq $v0, DOWN, checkCollisionDown
@@ -58,4 +93,21 @@
 	
 	skipMovement:
 	j loop
+	
+	gameOver:
+	la $a0, message_GameOver
+	li $v0, 4
+	syscall
+
+	move $a0, $s5
+	li $v0, 1
+	syscall
+	
+	li $v0, 10
+	syscall
 .end_macro
+
+
+.data
+
+message_GameOver: .asciiz "Você perdeu! Pontuação:\n"

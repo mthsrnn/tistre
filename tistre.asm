@@ -29,11 +29,6 @@ main:
 	lui  $s0, 0x1004					# Endereço do display
 	#li $s1, 4288						# Endereço do tetrimino inicial (definido aqui para debug) 
 	drawScreen							# Renderiza as bordas da tela do jogo (também limpa tudo)
-		
-	li $s5, 0
-
-	li $t0, 4528
-	drawTetriminoO_0($t0, CYAN)
 	
 	gameLoop
 	

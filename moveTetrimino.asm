@@ -1,6 +1,8 @@
 moveTetrimino:
-    addi $sp, $sp, -4
+    addi $sp, $sp, -12
     sw   $ra, 0($sp)
+	sw   $s6, 4($sp)
+	sw   $s7, 8($sp)
 
 	move $s6, $a0
        
@@ -297,6 +299,8 @@ moveTetrimino:
 		j endMoveTetrimino
 	
 	endMoveTetrimino:
+		lw   $s7, 8($sp)
+		lw   $s6, 4($sp)
 		lw   $ra, 0($sp)      
-		addi $sp, $sp, 4     
+		addi $sp, $sp, 12     
 		jr   $ra

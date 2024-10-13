@@ -2,6 +2,7 @@
 .include "rotateTetrimino.asm"
 .include "keyboardParse.asm"
 .include "clearLines.asm"
+.include "gameOverCheck.asm"
 
 
 drawLineH:
@@ -84,62 +85,96 @@ collisionCheck:
 	addi $sp, $sp, 4
     jr $ra
 
-randomTetrimino:
-	addi $sp, $sp, -4
+drawNewTetrimino:
+	addi $sp, $sp, -16
 	sw   $ra, 0($sp)
-    
-    li $a0, 0
-    li $a1, 6
-    li $v0, 42
-    syscall
+	sw   $s4, 4($sp)
+	sw   $s5, 8($sp)
+	sw   $s6, 12($sp)
 
-    move $s2, $a0
-	li $s1, 4288
-	li $s3, 0 # guarda a rotação atual do tetrimino
-    
-    beq $a0, 0, randomTetriminoJ
-    beq $a0, 1, randomTetriminoL
-    beq $a0, 2, randomTetriminoI
-    beq $a0, 3, randomTetriminoO
-    beq $a0, 4, randomTetriminoS
-    beq $a0, 5, randomTetriminoZ
-    beq $a0, 6, randomTetriminoT
-    j endRandomTetrimino
+    move $s4, $a0
+	move $s5, $a1
 
-	randomTetriminoJ:
-		addi $s1, $s1, -4096
-    	drawTetriminoJ_0($s1, BLUE)
-    	j endRandomTetrimino
+    beq $s4, 0, newTetriminoJ
+    beq $s4, 1, newTetriminoL
+    beq $s4, 2, newTetriminoI
+    beq $s4, 3, newTetriminoO
+    beq $s4, 4, newTetriminoS
+    beq $s4, 5, newTetriminoZ
+    beq $s4, 6, newTetriminoT
+    j endNewTetrimino
 
-	randomTetriminoL:
-    	drawTetriminoL_0($s1, RED)
-    	j endRandomTetrimino
+	newTetriminoJ:
+		addi $s5, $s5, -4096
+		move $v1, $s5
+		move $s1, $s5
+		collisionCheckJ_0($zero)
+		move $s6, $v0
+    	drawTetriminoJ_0($s5, BLUE)
+    	j endNewTetrimino
 
-	randomTetriminoI:
-    	drawTetriminoI_0($s1, CYAN)
-    	j endRandomTetrimino
+	newTetriminoL:
+		addi $s5, $s5, -4096
+		move $v1, $s5
+		move $s1, $s5
+		collisionCheckL_0($zero)
+		move $s6, $v0
 
-	randomTetriminoO:
-		addi $s1, $s1, -4096
-    	drawTetriminoO_0($s1, YELLOW)
-    	j endRandomTetrimino
+    	drawTetriminoL_0($s5, RED)
+    	j endNewTetrimino
 
-	randomTetriminoS:
-		addi $s1, $s1, -4096
-    	drawTetriminoS_0($s1, MAGENTA)
-    	j endRandomTetrimino
+	newTetriminoI:
+		move $v1, $s5
+		collisionCheckI_0($s5)
+		move $s6, $v0
+    	move $s1, $s5
+		collisionCheckI_0($zero)
+		drawTetriminoI_0($s5, CYAN)
 
-	randomTetriminoZ:
-		addi $s1, $s1, -4096
-    	drawTetriminoZ_0($s1, GREEN)
-    	j endRandomTetrimino
+    	j endNewTetrimino
 
-	randomTetriminoT:
-    	drawTetriminoT_0($s1, ORANGE)
-    	j endRandomTetrimino
+	newTetriminoO:
+		addi $s5, $s5, -4096
+		move $v1, $s5
+		move $s1, $s5
+		collisionCheckO_0($zero)
+		move $s6, $v0
+    	drawTetriminoO_0($s5, YELLOW)
+    	j endNewTetrimino
 
-	endRandomTetrimino:
+	newTetriminoS:
+		addi $s5, $s5, -4096
+		move $v1, $s5
+		move $s1, $s5
+		collisionCheckS_0($zero)
+		move $s6, $v0
+    	drawTetriminoS_0($s5, MAGENTA)
+    	j endNewTetrimino
+
+	newTetriminoZ:
+		addi $s5, $s5, -4096
+		move $v1, $s5
+		move $s1, $s5
+		collisionCheckZ_0($zero)
+		move $s6, $v0
+    	drawTetriminoZ_0($s5, GREEN)
+    	j endNewTetrimino
+
+	newTetriminoT:
+		move $v1, $s5
+		move $s1, $s5
+		collisionCheckT_0($zero)
+		move $s6, $v0
+    	drawTetriminoT_0($s5, ORANGE)
+    	j endNewTetrimino
+
+	endNewTetrimino:
+		move $v1, $s5
+		move $v0, $s6
+		lw  $s6, 12($sp)
+		lw   $s5, 8($sp)
+		lw   $s4, 4($sp)
 	    lw   $ra, 0($sp)
-    	addi $sp, $sp, 4
+    	addi $sp, $sp, 16
     	jr   $ra
 
