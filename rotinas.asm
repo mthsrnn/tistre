@@ -1,6 +1,7 @@
 .include "moveTetrimino.asm"
 .include "rotateTetrimino.asm"
 .include "keyboardParse.asm"
+.include "clearLines.asm"
 
 
 drawLineH:
@@ -25,6 +26,9 @@ drawLineV:
 	jr $ra
 
 drawBlock:
+	addi $sp, $sp, -4
+	sw   $ra, 0($sp)
+
 	li $t2, 8
 	move $t3, $a0
 	drawBlockOuterLoop:
@@ -38,9 +42,14 @@ drawBlock:
 			addi $t3, $t3, 480
 			addi $t2, $t2, -1
 			bgt $t2, 0, drawBlockOuterLoop
+	lw   $ra, 0($sp)
+	addi $sp, $sp, 4
 	jr $ra
 	
 deleteBlock:
+	addi $sp, $sp, -4
+	sw   $ra, 0($sp)
+
 	li $t2, 8
 	move $t3, $a0
 	deleteBlockOuterLoop:
@@ -54,6 +63,8 @@ deleteBlock:
 			addi $t3, $t3, 480
 			addi $t2, $t2, -1
 			bgt $t2, 0, deleteBlockOuterLoop
+	lw   $ra, 0($sp)
+	addi $sp, $sp, 4
 	jr $ra
 
 collisionCheck:

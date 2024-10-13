@@ -20,3 +20,42 @@
 	drawHorizontalLine(128, 0, RED)
 	drawHorizontalLine(128, 130560, RED)
 .end_macro
+
+.macro gameLoop
+
+	newTetrimino:
+	move $a0, $s0
+	jal clearLines
+	jal randomTetrimino
+	
+	loop:
+	addu $s5, $s5, 1
+	bgtu $s5, 50000, fallTetrimino
+	jal keyboardParse
+	beqz $v0, skipMovement
+	beq $v0, DOWN, checkCollisionDown
+	bnez $v1, movementRotation
+	move $a0, $v0
+	jal moveTetrimino
+	j loop
+	
+	fallTetrimino:
+	li $a0, DOWN
+	jal moveTetrimino
+	li $s5, 0
+	bnez $v0, newTetrimino
+	j loop
+	
+	movementRotation:
+	jal rotateTetrimino
+	j loop
+	
+	checkCollisionDown:
+	move $a0, $v0
+	jal moveTetrimino
+	bnez $v0, newTetrimino
+	j loop
+	
+	skipMovement:
+	j loop
+.end_macro
