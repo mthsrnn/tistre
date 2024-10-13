@@ -9,3 +9,7 @@
 .eqv CYAN 0x0aaeb3
 .eqv WHITE 0xbaa67f
 .eqv ORANGE 0xff5f00
+
+.eqv LEFT -32
+.eqv RIGHT 32
+.eqv DOWN 4096

@@ -1,3 +1,10 @@
+.include "moveTetrimino.asm"
+.include "rotateTetrimino.asm"
+.include "keyboardParse.asm"
+.include "clearLines.asm"
+.include "gameOverCheck.asm"
+
+
 drawLineH:
 	move $t2, $a2
 	move $t3, $a0
@@ -20,6 +27,9 @@ drawLineV:
 	jr $ra
 
 drawBlock:
+	addi $sp, $sp, -4
+	sw   $ra, 0($sp)
+
 	li $t2, 8
 	move $t3, $a0
 	drawBlockOuterLoop:
@@ -33,9 +43,14 @@ drawBlock:
 			addi $t3, $t3, 480
 			addi $t2, $t2, -1
 			bgt $t2, 0, drawBlockOuterLoop
+	lw   $ra, 0($sp)
+	addi $sp, $sp, 4
 	jr $ra
 	
 deleteBlock:
+	addi $sp, $sp, -4
+	sw   $ra, 0($sp)
+
 	li $t2, 8
 	move $t3, $a0
 	deleteBlockOuterLoop:
@@ -49,158 +64,117 @@ deleteBlock:
 			addi $t3, $t3, 480
 			addi $t2, $t2, -1
 			bgt $t2, 0, deleteBlockOuterLoop
+	lw   $ra, 0($sp)
+	addi $sp, $sp, 4
 	jr $ra
 
-
-randomTetrimino:
+collisionCheck:
 	addi $sp, $sp, -4
 	sw   $ra, 0($sp)
-    
-    li $a0, 0
-    li $a1, 6
-    li $v0, 42
-    syscall
-    
-    move $s2, $a0
-    
-    beq $a0, 0, randomTetriminoJ
-    beq $a0, 1, randomTetriminoL
-    beq $a0, 2, randomTetriminoI
-    beq $a0, 3, randomTetriminoO
-    beq $a0, 4, randomTetriminoS
-    beq $a0, 5, randomTetriminoZ
-    beq $a0, 6, randomTetriminoT
-    j endRandomTetrimino
 
-	randomTetriminoJ:
-		li $s1, 4288
-    	drawTetriminoJ($s1, BLUE)
-    	j endRandomTetrimino
+    lw $t1, 0($a0)
+    beq $t1, BLACK, collisionCheckEnd
 
-	randomTetriminoL:
-		li $s1, 4256
-    	drawTetriminoL($s1, RED)
-    	j endRandomTetrimino
+	#li $a1, RED
+	#jal drawBlock
 
-	randomTetriminoI:
-		li $s1, 4256
-    	drawTetriminoI($s0, CYAN)
-    	j endRandomTetrimino
+	addi $v0, $v0, 1
 
-	randomTetriminoO:
-		li $s1, 4256
-    	drawTetriminoO($s1, YELLOW)
-    	j endRandomTetrimino
+	collisionCheckEnd:
+	lw   $ra, 0($sp)
+	addi $sp, $sp, 4
+    jr $ra
 
-	randomTetriminoS:
-		li $s1, 4256
-    	drawTetriminoS($s1, MAGENTA)
-    	j endRandomTetrimino
+drawNewTetrimino:
+	addi $sp, $sp, -16
+	sw   $ra, 0($sp)
+	sw   $s4, 4($sp)
+	sw   $s5, 8($sp)
+	sw   $s6, 12($sp)
 
-	randomTetriminoZ:
-		li $s1, 4256
-    	drawTetriminoZ($s1, MAGENTA)
-    	j endRandomTetrimino
+    move $s4, $a0
+	move $s5, $a1
 
-	randomTetriminoT:
-		li $s1, 4224
-    	drawTetriminoT($s1, ORANGE)
-    	j endRandomTetrimino
+    beq $s4, 0, newTetriminoJ
+    beq $s4, 1, newTetriminoL
+    beq $s4, 2, newTetriminoI
+    beq $s4, 3, newTetriminoO
+    beq $s4, 4, newTetriminoS
+    beq $s4, 5, newTetriminoZ
+    beq $s4, 6, newTetriminoT
+    j endNewTetrimino
 
-	endRandomTetrimino:
+	newTetriminoJ:
+		addi $s5, $s5, -4096
+		move $v1, $s5
+		move $s1, $s5
+		collisionCheckJ_0($zero)
+		move $s6, $v0
+    	drawTetriminoJ_0($s5, BLUE)
+    	j endNewTetrimino
+
+	newTetriminoL:
+		addi $s5, $s5, -4096
+		move $v1, $s5
+		move $s1, $s5
+		collisionCheckL_0($zero)
+		move $s6, $v0
+
+    	drawTetriminoL_0($s5, RED)
+    	j endNewTetrimino
+
+	newTetriminoI:
+		move $v1, $s5
+		collisionCheckI_0($s5)
+		move $s6, $v0
+    	move $s1, $s5
+		collisionCheckI_0($zero)
+		drawTetriminoI_0($s5, CYAN)
+
+    	j endNewTetrimino
+
+	newTetriminoO:
+		addi $s5, $s5, -4096
+		move $v1, $s5
+		move $s1, $s5
+		collisionCheckO_0($zero)
+		move $s6, $v0
+    	drawTetriminoO_0($s5, YELLOW)
+    	j endNewTetrimino
+
+	newTetriminoS:
+		addi $s5, $s5, -4096
+		move $v1, $s5
+		move $s1, $s5
+		collisionCheckS_0($zero)
+		move $s6, $v0
+    	drawTetriminoS_0($s5, MAGENTA)
+    	j endNewTetrimino
+
+	newTetriminoZ:
+		addi $s5, $s5, -4096
+		move $v1, $s5
+		move $s1, $s5
+		collisionCheckZ_0($zero)
+		move $s6, $v0
+    	drawTetriminoZ_0($s5, GREEN)
+    	j endNewTetrimino
+
+	newTetriminoT:
+		move $v1, $s5
+		move $s1, $s5
+		collisionCheckT_0($zero)
+		move $s6, $v0
+    	drawTetriminoT_0($s5, ORANGE)
+    	j endNewTetrimino
+
+	endNewTetrimino:
+		move $v1, $s5
+		move $v0, $s6
+		lw  $s6, 12($sp)
+		lw   $s5, 8($sp)
+		lw   $s4, 4($sp)
 	    lw   $ra, 0($sp)
-    	addi $sp, $sp, 4
+    	addi $sp, $sp, 16
     	jr   $ra
 
-fallingTetrimino:
-    addi $sp, $sp, -4
-    sw   $ra, 0($sp)
-
-    move $t0, $s2            
-    beq $t0, 0, fallTetriminoJ
-    beq $t0, 1, fallTetriminoL
-    beq $t0, 2, fallTetriminoI
-    beq $t0, 3, fallTetriminoO
-    beq $t0, 4, fallTetriminoS
-    beq $t0, 5, fallTetriminoZ
-    beq $t0, 6, fallTetriminoT
-    j endFallingTetrimino
-
-fallTetriminoJ:
-    drawTetriminoJ($s1, BLACK)
-
-    addi $s1, $s1, 4096
-
-    drawTetriminoJ($s1, BLUE)
-    j endFallingTetrimino
-
-fallTetriminoL:
-    # Delete the current L block
-    drawTetriminoL($s1, BLACK)
-
-    # Move the position down by one row
-    addi $s1, $s1, 4096
-
-    # Draw the L block at the new position
-    drawTetriminoL($s1, RED)
-    j endFallingTetrimino
-
-fallTetriminoI:
-    # Delete the current I block
-    drawTetriminoI($s1, BLACK)
-
-    # Move the position down by one row
-    addi $s1, $s1, 4096
-
-    # Draw the I block at the new position
-    drawTetriminoI($s1, CYAN)
-    j endFallingTetrimino
-
-fallTetriminoO:
-    # Delete the current O block
-    drawTetriminoO($s1, BLACK)
-
-    # Move the position down by one row
-    addi $s1, $s1, 4096
-
-    # Draw the O block at the new position
-    drawTetriminoO($s1, YELLOW)
-    j endFallingTetrimino
-
-fallTetriminoS:
-    # Delete the current S block
-    drawTetriminoS($s1, BLACK)
-
-    # Move the position down by one row
-    addi $s1, $s1, 4096
-
-    # Draw the S block at the new position
-    drawTetriminoS($s1, GREEN)
-    j endFallingTetrimino
-
-fallTetriminoZ:
-    # Delete the current Z block
-    drawTetriminoZ($s1, BLACK)
-
-    # Move the position down by one row
-    addi $s1, $s1, 4096
-
-    # Draw the Z block at the new position
-    drawTetriminoZ($s1, MAGENTA)
-    j endFallingTetrimino
-
-fallTetriminoT:
-    # Delete the current T block
-    drawTetriminoT($s1, BLACK)
-
-    # Move the position down by one row
-    addi $s1, $s1, 4096
-
-    # Draw the T block at the new position
-    drawTetriminoT($s1, ORANGE)
-    j endFallingTetrimino
-
-endFallingTetrimino:
-    lw   $ra, 0($sp)      # Restore the return address
-    addi $sp, $sp, 4      # Deallocate space on the stack
-    jr   $ra              # Return from the routine
