@@ -25,13 +25,18 @@
 #		   Base address for display: 0x10040000(heap)
 
 .text
+
+showMenuLabel:
+	showMenu
 main:
 	lui  $s0, 0x1004					# Endereço do display
 	#li $s1, 4288						# Endereço do tetrimino inicial (definido aqui para debug) 
+	
 	drawScreen							# Renderiza as bordas da tela do jogo (também limpa tudo)
 	
 	gameLoop
 	
+	exitGame:
 	li $v0, 10
 	syscall
 	

@@ -31,6 +31,8 @@ clearLines:
             bgt $s2, $zero, clearLinesInnerLoop 
         bne $s4, 10, skipDeleteLine
 
+
+
         move $a0, $s3
         move $a1, $s1
         addi $s6, $s6, 1
@@ -45,7 +47,8 @@ clearLines:
         bgt $s1, $zero, clearLinesLoop
         
     clearLinesEnd:
-        mul $v0, $s6, 100 #SE DER PRA BREACAR, BRECA AQUI
+        
+        move $v1, $s6
 
         lw $ra, 32($sp)
         lw $s7, 28($sp)
@@ -124,8 +127,6 @@ copyBlockFromAbove:
     jal drawBlock
 
     skipDrawing:
-    move $a0, $s1
-    jal deleteBlock
 
     lw $ra, 8($sp)
     lw $s1, 4($sp)

@@ -3,6 +3,7 @@
 .include "keyboardParse.asm"
 .include "clearLines.asm"
 .include "gameOverCheck.asm"
+.include "scoring.asm"
 
 
 drawLineH:
