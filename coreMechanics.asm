@@ -106,6 +106,8 @@
 .end_macro
 
 .macro showMenu
+	sw $zero, data_score
+
 	la $a0, message_menu
 	li $a1, 1
 	li $v0, 55
@@ -125,7 +127,7 @@
 
 
 .data
-message_menu: .asciiz "\n\nBem-vindo ao Tistre, o Tetris mais triste que tem.\n Pressione uma tecla no MMIO Siumlator:\n\nj - Jogar\ns - Sair\n"
+message_menu: .asciiz "\n\nBem-vindo ao Tistre, o Tetris mais triste que tem.\nPressione uma tecla no MMIO Siumlator:\n\nj - Jogar\ns - Sair\n"
 message_GameOver: .asciiz "Você perdeu! Pontuação:\n\n"
 data_score: .word 0
 
