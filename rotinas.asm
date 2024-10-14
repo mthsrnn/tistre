@@ -59,14 +59,18 @@ deleteBlock:
 	deleteBlockOuterLoop:
 		li $t4, 8
 		li $t5, BLACK
-		deleteBlockInnerLoop:
+		deleteBlockLoop:
 			sw $t5, 0($t3)
-			addi $t3, $t3, 4
-			addi $t4, $t4, -1
-			bgt $t4, 0, deleteBlockInnerLoop
-			addi $t3, $t3, 480
+			sw $t5, 4($t3)
+			sw $t5, 8($t3)
+			sw $t5, 12($t3)
+			sw $t5, 16($t3)
+			sw $t5, 20($t3)
+			sw $t5, 24($t3)
+			sw $t5, 28($t3)
+			addi $t3, $t3, 512
 			addi $t2, $t2, -1
-			bgt $t2, 0, deleteBlockOuterLoop
+			bgt $t2, 0, deleteBlockLoop
 	lw   $ra, 0($sp)
 	addi $sp, $sp, 4
 	jr $ra
