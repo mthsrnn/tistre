@@ -33,17 +33,19 @@ drawBlock:
 
 	li $t2, 8
 	move $t3, $a0
-	drawBlockOuterLoop:
-		li $t4, 8
-		move $t5, $a1
-		drawBlockInnerLoop:
+	move $t5, $a1
+		drawBlockLoop:
 			sw $t5, 0($t3)
-			addi $t3, $t3, 4
-			addi $t4, $t4, -1
-			bgt $t4, 0, drawBlockInnerLoop
-			addi $t3, $t3, 480
+			sw $t5, 4($t3)
+			sw $t5, 8($t3)
+			sw $t5, 12($t3)
+			sw $t5, 16($t3)
+			sw $t5, 20($t3)
+			sw $t5, 24($t3)
+			sw $t5, 28($t3)
+			addi $t3, $t3, 512
 			addi $t2, $t2, -1
-			bgt $t2, 0, drawBlockOuterLoop
+			bgt $t2, 0, drawBlockLoop
 	lw   $ra, 0($sp)
 	addi $sp, $sp, 4
 	jr $ra
